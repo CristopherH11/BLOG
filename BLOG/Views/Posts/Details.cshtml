@@ -1,0 +1,51 @@
+@model BLOG.Models.Post
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Post</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Body)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+<!-- Mostrar comentarios existentes -->
+<h3>Comentarios</h3>
+<ul>
+    @foreach (var comment in Model.Comments)
+    {
+        <li>@comment.Text</li>
+    }
+</ul>
+
+<!-- Formulario para añadir un nuevo comentario -->
+<h3>Añadir un comentario</h3>
+<form asp-action="Create" asp-controller="Comments" method="post">
+    <input type="hidden" name="PostId" value="@Model.Id" />
+    <div>
+        <label for="Text">Comentario:</label>
+        <textarea name="Text"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Enviar comentario" />
+    </div>
+</form>

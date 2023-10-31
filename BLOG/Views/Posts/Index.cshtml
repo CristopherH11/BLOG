@@ -1,0 +1,75 @@
+@model List<Post>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="callout large primary">
+    <div class="text-center">
+        <h1>Diario web</h1>
+    </div>
+</div>
+<section class="grid-container">
+    <div class="grid-x grid-margin-x" id="content">
+        <div class="medium-9 cell">
+            @foreach (var firstItem in Model)
+            {
+                <article class="blog-post">
+                    <h3>@firstItem.Title<small>@firstItem.PostDate</small></h3>
+                    <p>
+                        @firstItem.Body
+                    </p>
+                    <div class="callout">
+                        <ul class="menu simple">
+                            <li><a href="#">Autor: </a></li>
+                            <li><a href="#">Comentarios: 3</a></li>
+                        </ul>
+                    </div>
+                </article>
+            }
+        </div>
+        <aside class="medium-3 cell" data-sticky-container="">
+            <div class="sticky" data-sticky="" data-anchor="content">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="#">PHP</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                    <li><a href="#">C#</a></li>
+                    <li><a href="#">Java</a></li>
+                </ul>
+                <h4>Autores</h4>
+                <ul>
+                    <li><a href="#">Sandra</a></li>
+                    <li><a href="#">Jessica</a></li>
+                    <li><a href="#">José</a></li>
+                    <li><a href="#">Andrés</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+    <div class="grid-x cell">
+        <ul class="pagination" role="navigation" aria-label="Pagination">
+            <li class="disabled">Previa</li>
+            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+            <li><a href="#" aria-label="Page 2">2</a></li>
+            <li><a href="#" aria-label="Page 3">3</a></li>
+            <li><a href="#" aria-label="Page 4">4</a></li>
+            <li class="ellipsis">
+                <br>
+            </li>
+            <li><a href="#" aria-label="Page 12">12</a></li>
+            <li><a href="#" aria-label="Page 13">13</a></li>
+            <li><a href="#" aria-label="Next page">Siguiente</a></li>
+        </ul>
+    </div>
+</section>
+<script src="bower_components/jquery/dist/jquery.js?hash=4d87a332421d7631f5e204529a472bff"></script>
+<script src="bower_components/what-input/what-input.js?hash=af041c30741a345292bed3cb0f1295ca"></script>
+<script src="bower_components/foundation-sites/dist/foundation.js?hash=37375b21ccbe17669cdc30790ba5a003"></script>
+<script src="js/app.js?hash=78ce4569316d2924214f821d75e9028f"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.2.3/motion-ui.min.js"></script>
+<script>
+    $(document).foundation();
+</script>
