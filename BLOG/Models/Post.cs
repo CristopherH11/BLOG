@@ -11,8 +11,7 @@ namespace BLOG.Models
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime PostDate { get; set; }
-
-        /*public string Author { get; set; }*/
+        public string Author { get; set; }
         public ICollection<Comment> Comments { get; set; }
     }
 }
