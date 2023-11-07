@@ -1,98 +1,91 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BLOG.Models;
 using BLOG.Models.Data;
 
 namespace BLOG.Controllers
 {
-    public class PostsController : Controller
+    public class CategoriesController : Controller
     {
         private readonly BlogDbContext _context;
 
-        public PostsController(BlogDbContext context)
+        public CategoriesController(BlogDbContext context)
         {
             _context = context;
         }
 
-        public IList<Post> Posts { get; set; } = default!;
-
-        // GET: Posts
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var allRecords = from m in _context.Posts
-                             orderby m.PostDate descending
-                             select m;
-
-            Posts = await allRecords
-                    .ToListAsync();
-
-            return View(Posts);
+              return _context.Categories != null ? 
+                          View(await _context.Categories.ToListAsync()) :
+                          Problem("Entity set 'BlogDbContext.Categories'  is null.");
         }
 
-        // GET: Posts/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Posts == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (post == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(post);
+            return View(category);
         }
 
-        // GET: Posts/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Posts/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body")] Post post)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(post);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(post);
+            return View(category);
         }
 
-        // GET: Posts/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Posts == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(post);
+            return View(category);
         }
 
-        // POST: Posts/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
-            if (id != post.Id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -101,12 +94,12 @@ namespace BLOG.Controllers
             {
                 try
                 {
-                    _context.Update(post);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.Id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -117,49 +110,49 @@ namespace BLOG.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(post);
+            return View(category);
         }
 
-        // GET: Posts/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Posts == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (post == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(post);
+            return View(category);
         }
 
-        // POST: Posts/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Posts == null)
+            if (_context.Categories == null)
             {
-                return Problem("Entity set 'BlogDbContext.Posts'  is null.");
+                return Problem("Entity set 'BlogDbContext.Categories'  is null.");
             }
-            var post = await _context.Posts.FindAsync(id);
-            if (post != null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
             {
-                _context.Posts.Remove(post);
+                _context.Categories.Remove(category);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PostExists(int id)
+        private bool CategoryExists(int id)
         {
-          return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

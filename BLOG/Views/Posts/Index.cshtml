@@ -12,17 +12,18 @@
 <section class="grid-container">
     <div class="grid-x grid-margin-x" id="content">
         <div class="medium-9 cell">
-            @foreach (var firstItem in Model)
+            @foreach (var post in Model)
             {
                 <article class="blog-post">
-                    <h3>@firstItem.Title<small>@firstItem.PostDate</small></h3>
+                    <h3>@post.Title </h3>
+                    <small>@post.PostDate</small>
                     <p>
-                        @firstItem.Body
+                        @post.Body
                     </p>
                     <div class="callout">
                         <ul class="menu simple">
-                            <li><a href="#">Autor: </a></li>
-                            <li><a href="#">Comentarios: 3</a></li>
+                            <li><a href="#">Autor: @post.Author</a></li>
+                            <li><a href="#">Comentarios: @post.Comments.Count</a></li>
                         </ul>
                     </div>
                 </article>
@@ -32,11 +33,16 @@
             <div class="sticky" data-sticky="" data-anchor="content">
                 <h4>Categorías</h4>
                 <ul>
-                    <li><a href="#">PHP</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">C#</a></li>
-                    <li><a href="#">Java</a></li>
+@*                 @foreach (var category in Category)
+                    {
+                        <li><a href="#">PHP</a></li>
+                        <li><a href="#">JavaScript</a></li>
+                        <li><a href="#">C#</a></li>
+                        <li><a href="#">Java</a></li>
+                    } *@
                 </ul>
+
+                
                 <h4>Autores</h4>
                 <ul>
                     <li><a href="#">Sandra</a></li>
