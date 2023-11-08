@@ -1,103 +1,52 @@
-﻿@{
+﻿@model dynamic
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="callout large primary">
     <div class="text-center">
-        <h1>Diario web</h1>
+        <h1>Recetas</h1>
     </div>
 </div>
 <section class="grid-container">
     <div class="grid-x grid-margin-x" id="content">
         <div class="medium-9 cell">
-            <article class="blog-post">
-                <h3>Un excelente título de publicación <small>18/10/2021</small></h3>
-                <img class="thumbnail" src="https://via.placeholder.com/850x350">
-                <p>
-                    Praesent id metus massa, ut blandit odio. Proin quis tortor orci.
-                    Etiam at risus et justo dignissim congue. Donec congue lacinia
-                    dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper
-                    orci. Quisque eget odio ac lectus vestibulum faucibus eget in
-                    metus. In pellentesque faucibus vestibulum. Nulla at nulla justo,
-                    eget luctus.
-                </p>
-                <div class="callout">
-                    <ul class="menu simple">
-                        <li><a href="#">Autor: José Pérez</a></li>
-                        <li><a href="#">Comentarios: 3</a></li>
-                    </ul>
-                </div>
-            </article>
-            <article class="blog-post">
-                <h3>Un excelente título de publicación <small>18/10/2021</small></h3>
-                <img class="thumbnail" src="https://via.placeholder.com/850x350">
-                <p>
-                    Praesent id metus massa, ut blandit odio. Proin quis tortor orci.
-                    Etiam at risus et justo dignissim congue. Donec congue lacinia
-                    dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper
-                    orci. Quisque eget odio ac lectus vestibulum faucibus eget in
-                    metus. In pellentesque faucibus vestibulum. Nulla at nulla justo,
-                    eget luctus.
-                </p>
-                <div class="callout">
-                    <ul class="menu simple">
-                        <li><a href="#">Autor: José Pérez</a></li>
-                        <li><a href="#">Comentarios: 3</a></li>
-                    </ul>
-                </div>
-            </article>
-            <article class="blog-post">
-                <h3>Un excelente título de publicación <small>18/10/2021</small></h3>
-                <img class="thumbnail" src="https://via.placeholder.com/850x350">
-                <p>
-                    Praesent id metus massa, ut blandit odio. Proin quis tortor orci.
-                    Etiam at risus et justo dignissim congue. Donec congue lacinia
-                    dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper
-                    orci. Quisque eget odio ac lectus vestibulum faucibus eget in
-                    metus. In pellentesque faucibus vestibulum. Nulla at nulla justo,
-                    eget luctus.
-                </p>
-                <div class="callout">
-                    <ul class="menu simple">
-                        <li><a href="#">Autor: José Pérez</a></li>
-                        <li><a href="#">Comentarios: 3</a></li>
-                    </ul>
-                </div>
-            </article>
-            <article class="blog-post">
-                <h3>Un excelente título de publicación <small>18/10/2021</small></h3>
-                <img class="thumbnail" src="https://via.placeholder.com/850x350">
-                <p>
-                    Praesent id metus massa, ut blandit odio. Proin quis tortor orci.
-                    Etiam at risus et justo dignissim congue. Donec congue lacinia
-                    dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper
-                    orci. Quisque eget odio ac lectus vestibulum faucibus eget in
-                    metus. In pellentesque faucibus vestibulum. Nulla at nulla justo,
-                    eget luctus.
-                </p>
-                <div class="callout">
-                    <ul class="menu simple">
-                        <li><a href="#">Autor: José Pérez</a></li>
-                        <li><a href="#">Comentarios: 3</a></li>
-                    </ul>
-                </div>
-            </article>
+            @foreach (var post in Model.Posts)
+            {
+                <article class="blog-post">
+                    <h3>@post.Title </h3>
+                    <small>@post.PostDate.ToString("dd/MM/yyyy hh:mm tt")</small>
+                    <p class="justify-text">
+                        @CustomHtmlHelper.Truncate(Html, @post.Body, post.Id, 300)
+                    </p>
+                    <div class="callout">
+                        <ul class="menu simple">
+                            <li><a href="#">Autor: @post.Author</a></li>
+                            <li><a href="#">Comentarios: @post.Comments.Count</a></li>
+                            <li><a href="#">Categoría: @post.Category.Name</a></li>
+                        </ul>
+                    </div>
+                </article>
+            }
         </div>
         <aside class="medium-3 cell" data-sticky-container="">
             <div class="sticky" data-sticky="" data-anchor="content">
+
                 <h4>Categorías</h4>
                 <ul>
-                    <li><a href="#">PHP</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">C#</a></li>
-                    <li><a href="#">Java</a></li>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li><a href="@Url.Action("Category", "Posts", new { id = category.Id })">@category.Name</a></li>
+                    }
                 </ul>
                 <h4>Autores</h4>
                 <ul>
-                    <li><a href="#">Sandra</a></li>
-                    <li><a href="#">Jessica</a></li>
-                    <li><a href="#">José</a></li>
-                    <li><a href="#">Andrés</a></li>
+                    @foreach (var author in Model.Authors)
+                    {
+                        <li><a href="@Url.Action("Author", "Posts", new { id = author })">@author</a></li>
+
+                    }
                 </ul>
             </div>
         </aside>

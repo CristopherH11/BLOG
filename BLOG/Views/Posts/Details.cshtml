@@ -4,41 +4,37 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Title)</h1>
 
-<div>
-    <h4>Post</h4>
+<div class="pb-6">
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class = "col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.Body)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 <!-- Mostrar comentarios existentes -->
-<h3>Comentarios</h3>
-<ul>
-    @foreach (var comment in Model.Comments)
-    {
-        <li>@comment.Text</li>
-    }
-</ul>
+<h4>Comentarios</h4> 
+@if (Model.Comments == null || Model.Comments.Count == 0)
+{
+    <div class="pb-3">
+        <small>No hay comentarios.</small>
+    </div>
+}
+else
+{
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li>@comment.Text</li>
+        }
+    </ul>
+}
 
 <!-- Formulario para añadir un nuevo comentario -->
-<h3>Añadir un comentario</h3>
+<h4>Añadir un comentario</h4>
 <form asp-action="Create" asp-controller="Comments" method="post">
     <input type="hidden" name="PostId" value="@Model.Id" />
     <div>

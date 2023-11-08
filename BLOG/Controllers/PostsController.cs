@@ -29,6 +29,44 @@ namespace BLOG.Controllers
             return View(Posts);
         }
 
+        // GET: Posts/Category/5
+        public async Task<IActionResult> Category(int? id)
+        {
+            if (id == null || _context.Posts == null)
+            {
+                return NotFound();
+            }
+
+            var tempPost = _context.Posts.Where(m => m.CategoryId == id);
+            var post = await tempPost.ToListAsync();
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        // GET: Posts/Author/5
+        public async Task<IActionResult> Author(string? id)
+        {
+            if (id == null || _context.Posts == null)
+            {
+                return NotFound();
+            }
+
+            var tempPost = _context.Posts.Where(m => m.Author == id);
+            var post = await tempPost.ToListAsync();
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
