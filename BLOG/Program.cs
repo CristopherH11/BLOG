@@ -26,8 +26,24 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "PostsCategory",
+        pattern: "Posts/Category/{id}",
+        defaults: new { controller = "Posts", action = "Category" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "PostsAuthors",
+        pattern: "Posts/Author/{id}",
+        defaults: new { controller = "Posts", action = "Author" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+});
 
 app.Run();
