@@ -1,10 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BLOG.Models;
-using BLOG.Models.Data;
+using BLOG.Data;
+using System.Composition;
+using Microsoft.Extensions.Hosting;
 
 namespace BLOG.Controllers
 {
+
+    public class CommentInfo
+    {
+
+        public AppUser AppUser { get; set; }
+        public Comment Comment { get; set; }
+    }
+    public class UtilsComponents
+    {
+        public Post Post { get; set; }
+
+        public AppUser AppUser { get; set; }
+        public List<CommentInfo> CommentInfo { get; set; } = new List<CommentInfo>();
+    }
+
     public class PostsController : Controller
     {
         private readonly BlogDbContext _context;
@@ -14,19 +31,37 @@ namespace BLOG.Controllers
             _context = context;
         }
 
-        public IList<Post> Posts { get; set; } = default!;
+        public IList<UtilsComponents> Posts { get; set; } = default!;
 
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var allRecords = from m in _context.Posts
-                             orderby m.PostDate descending
-                             select m;
+            var allRecords = from post in _context.Posts
+                             join user in _context.Users on post.AuthorId equals user.Id
+                             orderby post.PostDate descending
+                             select new UtilsComponents
+                             {
+                                 Post = post,
+                                 AppUser = user
+                             };
 
-            Posts = await allRecords
-                    .ToListAsync();
+            List<UtilsComponents> currentPosts = await allRecords.ToListAsync();
 
-            return View(Posts);
+            foreach (var recordSRM in currentPosts)
+            {
+                var new_comments = from comment in _context.Comments
+                                   join user in _context.Users on comment.AuthorId equals user.Id
+                                   where comment.PostId == recordSRM.Post.Id
+                                   select new CommentInfo
+                                   {
+                                       Comment = comment,
+                                       AppUser = user
+                                   };
+
+                recordSRM.CommentInfo = await new_comments.ToListAsync();
+            }
+
+            return View(currentPosts);
         }
 
         // GET: Posts/Category/5
