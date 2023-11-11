@@ -22,8 +22,9 @@
                     </p>
                     <div class="callout">
                         <ul class="menu simple">
-                            <li><a href="#">Autor: @post.Author</a></li>
+                            <li><a href="@Url.Action("Author", "Posts", new { id = post.Author })">Autor: @post.Author</a></li>
                             <li><a href="#">Comentarios: @post.Comments.Count</a></li>
+                            <li><a href="@Url.Action("Category", "Posts", new { id = post.CategoryId })">Categoría: @post.Category.Name</a></li>
                         </ul>
                     </div>
                 </article>

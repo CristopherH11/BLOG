@@ -11,6 +11,7 @@ namespace BLOG.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly BlogDbContext _context;
+        private dynamic mymodel = new ExpandoObject();
 
         public HomeController(ILogger<HomeController> logger, BlogDbContext context)
         {
@@ -18,10 +19,9 @@ namespace BLOG.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             // Category
-            dynamic mymodel = new ExpandoObject();
             mymodel.Categories = await _context.Categories.ToListAsync();
 
             // Authors
@@ -30,7 +30,9 @@ namespace BLOG.Controllers
 
             // Posts
             var tempPosts = from m in _context.Posts orderby m.PostDate descending select m;
-            mymodel.Posts = await tempPosts.ToListAsync();
+            var tempPostsList = await tempPosts.ToListAsync();
+            mymodel.PostsCount = tempPostsList.Count;
+            mymodel.Posts = PaginateData(tempPostsList, page, 5);
 
             return View(mymodel);
         }
@@ -44,6 +46,13 @@ namespace BLOG.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private static List<Post> PaginateData(List<Post> data, int page, int pageSize)
+        {
+            return data.Skip((page - 1) * pageSize)
+                       .Take(pageSize)
+                       .ToList();
         }
     }
 }
