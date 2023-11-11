@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BLOG.Models;
-using BLOG.Models.Data;
+using BLOG.Data;
+using Microsoft.Extensions.Hosting;
+using System.Composition;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BLOG.Controllers
 {
@@ -18,6 +21,8 @@ namespace BLOG.Controllers
         {
             _context = context;
         }
+
+        public UtilsComponents Posts { get; set; } = default!;
 
         // GET: Comments
         public async Task<IActionResult> Index()
@@ -46,27 +51,76 @@ namespace BLOG.Controllers
         }
 
         // GET: Comments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int postId)
         {
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id");
-            return View();
+            var query = await (from post in _context.Posts
+                               join user in _context.Users on post.AuthorId equals user.Id
+                               where post.Id == postId
+                               select new UtilsComponents
+                               {
+                                   Post = post,
+                                   AppUser = user
+                               })
+                 .FirstOrDefaultAsync();
+
+            if (query != null)
+            {
+                UtilsComponents temp = new UtilsComponents
+                {
+                    Post = query.Post,
+                    AppUser = query.AppUser,
+                    CommentInfo = await GetCommentsAsync(query.Post.Id),
+                };
+
+                Posts = temp;
+
+                return View(Posts);
+            }
+            else
+            {
+                // Manejar el caso cuando query es null, por ejemplo, redirigir a una página de error.
+                return NotFound(); // o return RedirectToAction("Error");
+            }
+        }
+
+        public async Task<List<CommentInfo>> GetCommentsAsync(int id)
+        {
+            var new_comments = from comment in _context.Comments
+                               join user in _context.Users on comment.AuthorId equals user.Id
+                               where comment.PostId == id
+                               select new CommentInfo
+                               {
+                                   Comment = comment,
+                                   AppUser = user
+                               };
+
+            return await new_comments.ToListAsync();
         }
 
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Text,PostId")] Comment comment)
+        public async Task<IActionResult> Create(int postId, string text, string AuthorId)
         {
+            Comment comment = new Comment
+            {
+                PostId = postId,
+                Text = text,
+                AuthorId = AuthorId
+            };
+
             if (ModelState.IsValid)
             {
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Posts", new { id = comment.PostId });
+                return RedirectToAction("Create", "Comments", new { postId });
             }
-            return View(comment);
+
+            return RedirectToAction("Create", "Comments", new { postId });
         }
+
 
         // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -1,4 +1,5 @@
-@model List<Post>
+@using BLOG.Controllers;
+@model List<UtilsComponents>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -15,15 +16,15 @@
             @foreach (var post in Model)
             {
                 <article class="blog-post">
-                    <h3>@post.Title </h3>
-                    <small>@post.PostDate</small>
+                    <h3>@post.Post.Title </h3>
+                    <small>@post.Post.PostDate</small>
                     <p>
-                        @post.Body
+                        @post.Post.Body
                     </p>
                     <div class="callout">
                         <ul class="menu simple">
-                            <li><a href="#">Autor: @post.Author</a></li>
-                            <li><a href="#">Comentarios: @post.Comments.Count</a></li>
+                            <li><a href="#">Autor: @post.AppUser.Name @post.AppUser.LastName</a></li>
+                            <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Post.Id">Comentarios: @post.CommentInfo.Count()</a></li>
                         </ul>
                     </div>
                 </article>

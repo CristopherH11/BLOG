@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BLOG.Models;
-using BLOG.Models.Data;
+using BLOG.Data;
 
 namespace BLOG.Controllers
 {

@@ -1,36 +1,84 @@
-@model BLOG.Models.Comment
+@using BLOG.Controllers;
+@model UtilsComponents
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Comment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostId" class="control-label"></label>
-                <select asp-for="PostId" class ="form-control" asp-items="ViewBag.PostId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="callout large primary">
+    <div class="text-center">
+        <h1>Diario web</h1>
     </div>
 </div>
+<section class="grid-container">
+    <div class="grid-x grid-margin-x" id="content">
+        <div class="medium-9 cell">
+            <article class="blog-post">
+                <h3>@Model.Post.Title </h3>
+                <small>@Model.Post.PostDate</small>
+                <p>
+                    @Model.Post.Body
+                </p>
+                <div class="callout">
+                    <ul class="menu simple">
+                        <li><a href="#">Autor: @Model.AppUser.Name @Model.AppUser.LastName</a></li>
+                    </ul>
+                </div>
+            </article>
+            <h3> Comentarios</h3>
+            @foreach (var comment in Model.CommentInfo)
+            {
+                <article class="blog-post">
+                    <h5>Usuario: @comment.AppUser.Name @comment.AppUser.LastName </h5>
+                    <p>
+                        @comment.Comment.Text
+                    </p>
+                </article>
+            }
+            <div class="col-8 new">
+                <h4> Haz un nuevo comantario</h4>
+                <form method="post" id="formRegistro" asp-action="Create" asp-controller="Comments">
+                    <input type="hidden" name="postId" value="@Model.Post.Id" />
+                    <input type="hidden" name="authorId" value="@Model.Post.AuthorId" />
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <div class="form-group">
+                            <textarea name="text" class="form-control form-control-add form-control form-control-add-lg" placeholder="Haz un comentario..." rows="5"></textarea>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-end align-items-center">
+                            <input type="submit" value="Guardar" id="ReportButton" class="add_confirm btn btn-primary btn-sm" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <aside class="medium-3 cell" data-sticky-container="">
+            <div class="sticky" data-sticky="" data-anchor="content">
+                <h4>Categorías</h4>
+                <ul>
+                    @*                 @foreach (var category in Category)
+                    {
+                    <li><a href="#">PHP</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                    <li><a href="#">C#</a></li>
+                    <li><a href="#">Java</a></li>
+                    } *@
+                </ul>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+                <h4>Autores</h4>
+                <ul>
+                    <li><a href="#">Sandra</a></li>
+                    <li><a href="#">Jessica</a></li>
+                    <li><a href="#">José</a></li>
+                    <li><a href="#">Andrés</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
