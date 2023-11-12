@@ -1,5 +1,5 @@
-﻿using BLOG.Models;
-using BLOG.Models.Data;
+﻿using BLOG.Data;
+using BLOG.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -25,8 +25,16 @@ namespace BLOG.Controllers
             mymodel.Categories = await _context.Categories.ToListAsync();
 
             // Authors
-            var tempAuthors = from m in _context.Posts select m.Author;
-            mymodel.Authors = await tempAuthors.Distinct().ToListAsync();
+            var tempAuthors = from m in _context.Posts select m.AuthorId;
+            var allAuthors = await _context.Users.ToListAsync();
+
+            foreach (var userId in tempAuthors)
+            {
+                var user = allAuthors.Find(x => x.Id == userId);
+                mymodel.Authors.Add(user);
+            }
+
+            mymodel.AppUser = await tempAuthors.Distinct().ToListAsync();
 
             // Posts
             var tempPosts = from m in _context.Posts orderby m.PostDate descending select m;

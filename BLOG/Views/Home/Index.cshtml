@@ -22,8 +22,8 @@
                     </p>
                     <div class="callout">
                         <ul class="menu simple">
-                            <li><a href="@Url.Action("Author", "Posts", new { id = post.Author })">Autor: @post.Author</a></li>
-                            <li><a href="#">Comentarios: @post.Comments.Count</a></li>
+                            <li><a href="@Url.Action("Author", "Posts", new { id = post.AuthorId })">Autor:  @post.AppUser.Name @post.AppUser.LastName</a></li>
+                            <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Post.Id">Comentarios: @post.CommentInfo.Count()</a></li>
                             <li><a href="@Url.Action("Category", "Posts", new { id = post.CategoryId })">Categoría: @post.Category.Name</a></li>
                         </ul>
                     </div>

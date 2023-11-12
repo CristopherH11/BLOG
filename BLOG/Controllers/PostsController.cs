@@ -91,7 +91,7 @@ namespace BLOG.Controllers
                 return NotFound();
             }
 
-            var tempPost = _context.Posts.Where(m => m.Author == id);
+            var tempPost = _context.Posts.Where(m => m.AuthorId == id);
             var post = await tempPost.ToListAsync();
 
             if (post == null)
