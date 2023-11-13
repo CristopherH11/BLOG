@@ -4,9 +4,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="callout large primary">
-    <div class="text-center">
-        <h1>Diario Web</h1>
+
+<div class="row d-flex justify-content-center align-items-center">
+    <div class="card">
+        <div class="bg">
+            <div class="text-center">
+                <h1>Diario web</h1>
+            </div>
+        </div>
+        <div class="blob"></div>
     </div>
 </div>
 <section class="grid-container">
@@ -44,7 +50,7 @@
                 <ul>
                     @foreach (var author in Model.Users)
                     {
-                        <li><a href="@Url.Action("Author", "Posts", new { id = author })">@author</a></li>
+                        <li><a href="@Url.Action("Author", "Posts", new { id = author.Id })">@author</a></li>
 
                     }
                 </ul>

@@ -38,34 +38,27 @@ namespace BLOG.Controllers
         public IList<UtilsComponents> Posts { get; set; } = default!;
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var allRecords = from post in _context.Posts
-                             join user in _context.Users on post.AuthorId equals user.Id
-                             orderby post.PostDate descending
-                             select new UtilsComponents
-                             {
-                                 Post = post,
-                                 AppUser = user
-                             };
+            // Category
+            mymodel.Categories = await _context.Categories.ToListAsync();
 
-            List<UtilsComponents> currentPosts = await allRecords.ToListAsync();
+            var allUsers = await _context.Users.ToListAsync();
+            mymodel.Users = allUsers;
 
-            foreach (var recordSRM in currentPosts)
-            {
-                var new_comments = from comment in _context.Comments
-                                   join user in _context.Users on comment.AuthorId equals user.Id
-                                   where comment.PostId == recordSRM.Post.Id
-                                   select new CommentInfo
-                                   {
-                                       Comment = comment,
-                                       AppUser = user
-                                   };
+            var tempPosts = from m in _context.Posts orderby m.PostDate descending select m;
+            var tempPostsList = await tempPosts.ToListAsync();
+            mymodel.PostsCount = tempPostsList.Count;
+            mymodel.Posts = PaginateData(tempPostsList, page, 5);
 
-                recordSRM.CommentInfo = await new_comments.ToListAsync();
-            }
+            return View(mymodel);
+        }
 
-            return View(currentPosts);
+        private static List<Post> PaginateData(List<Post> data, int page, int pageSize)
+        {
+            return data.Skip((page - 1) * pageSize)
+                       .Take(pageSize)
+                       .ToList();
         }
 
         // GET: Posts/Category/5
@@ -239,13 +232,22 @@ namespace BLOG.Controllers
                 return Problem("Entity set 'BlogDbContext.Posts'  is null.");
             }
             var post = await _context.Posts.FindAsync(id);
+
+            var comments = from comment in _context.Comments
+                           where comment.PostId == id
+                           select comment;
+
+            List<Comment> allcomments = await comments.ToListAsync();
+
+            _context.Comments.RemoveRange(allcomments);
+
             if (post != null)
             {
                 _context.Posts.Remove(post);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool PostExists(int id)

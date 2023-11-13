@@ -1,36 +1,27 @@
-@model IEnumerable<BLOG.Models.Post>
+@model dynamic
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Posts</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@foreach (var post in Model.Posts)
+{
+    <article class="blog-post">
+        <h3>@post.Title </h3>
+        <small>@post.PostDate.ToString("dd/MM/yyyy hh:mm tt")</small>
+        <p class="justify-text">
+            @CustomHtmlHelper.Truncate(Html, @post.Body, post.Id, 300)
+        </p>
+        <div class="callout">
+            <ul class="menu simple">
+                <li><a href="@Url.Action("Author", "Posts", new { id = post.AuthorId })">Autor:  @post.User.Name @post.User.LastName</a></li>
+                <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Id">Comentarios</a></li>
+                <li><a href="@Url.Action("Category", "Posts", new { id = post.CategoryId })">Categoría: @post.Category.Name</a></li>
+            </ul>
+        </div>
+    </article>
+    <a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Id">Detalles</a>
+    <a asp-action="Delete" asp-route-id="@post.Id">Eliminar</a>
+}
