@@ -1,61 +1,36 @@
-@using BLOG.Controllers;
-@model List<UtilsComponents>
+@model IEnumerable<BLOG.Models.Post>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="callout large primary">
-    <div class="text-center">
-        <h1>Diario web</h1>
-    </div>
-</div>
-<section class="grid-container">
-    <div class="grid-x grid-margin-x" id="content">
-        <div class="medium-9 cell">
-            @foreach (var post in Model)
-            {
-                <article class="blog-post">
-                    <h3>@post.Post.Title </h3>
-                    <small>@post.Post.PostDate</small>
-                    <p>
-                        @post.Post.Body
-                    </p>
-                    <div class="callout">
-                        <ul class="menu simple">
-                            <li><a href="@Url.Action("Author", "Posts", new { id = post.Author })">Autor: @post.Author</a></li>
-                            <li><a href="@Url.Action("Category", "Posts", new { id = post.CategoryId })">Categoría: @post.Category.Name</a></li>
-                            <li><a href="#">Autor: @post.AppUser.Name @post.AppUser.LastName</a></li>
-                            <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Post.Id">Comentarios: @post.CommentInfo.Count()</a></li>
-                        </ul>
-                    </div>
-                </article>
-            }
-        </div>
-    </div>
-    <div class="grid-x cell">
-        <ul class="pagination" role="navigation" aria-label="Pagination">
-            <li class="disabled">Previa</li>
-            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-            <li><a href="#" aria-label="Page 2">2</a></li>
-            <li><a href="#" aria-label="Page 3">3</a></li>
-            <li><a href="#" aria-label="Page 4">4</a></li>
-            <li class="ellipsis">
-                <br>
-            </li>
-            <li><a href="#" aria-label="Page 12">12</a></li>
-            <li><a href="#" aria-label="Page 13">13</a></li>
-            <li><a href="#" aria-label="Next page">Siguiente</a></li>
-        </ul>
-    </div>
-</section>
-<script src="bower_components/jquery/dist/jquery.js?hash=4d87a332421d7631f5e204529a472bff"></script>
-<script src="bower_components/what-input/what-input.js?hash=af041c30741a345292bed3cb0f1295ca"></script>
-<script src="bower_components/foundation-sites/dist/foundation.js?hash=37375b21ccbe17669cdc30790ba5a003"></script>
-<script src="js/app.js?hash=78ce4569316d2924214f821d75e9028f"></script>
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.2.3/motion-ui.min.js"></script>
-<script>
-    $(document).foundation();
-</script>
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

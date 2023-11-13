@@ -26,15 +26,16 @@ namespace BLOG.Controllers
 
             // Authors
             var tempAuthors = from m in _context.Posts select m.AuthorId;
-            var allAuthors = await _context.Users.ToListAsync();
+            var tempAuthorsUnique = await tempAuthors.Distinct().ToListAsync();
 
-            foreach (var userId in tempAuthors)
+            var allUsers = await _context.Users.ToListAsync();
+            mymodel.Users = allUsers;
+
+            foreach (var a in tempAuthorsUnique)
             {
-                var user = allAuthors.Find(x => x.Id == userId);
+                var user = allUsers.Find(x => x.Id == a);
                 mymodel.Authors.Add(user);
             }
-
-            mymodel.AppUser = await tempAuthors.Distinct().ToListAsync();
 
             // Posts
             var tempPosts = from m in _context.Posts orderby m.PostDate descending select m;

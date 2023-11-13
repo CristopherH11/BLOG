@@ -6,7 +6,7 @@
 
 <div class="callout large primary">
     <div class="text-center">
-        <h1>Recetas</h1>
+        <h1>Diario Web</h1>
     </div>
 </div>
 <section class="grid-container">
@@ -42,7 +42,7 @@
                 </ul>
                 <h4>Autores</h4>
                 <ul>
-                    @foreach (var author in Model.Authors)
+                    @foreach (var author in Model.Users)
                     {
                         <li><a href="@Url.Action("Author", "Posts", new { id = author })">@author</a></li>
 
