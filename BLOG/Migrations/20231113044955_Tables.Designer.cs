@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BLOG.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20231109203306_Tables")]
+    [Migration("20231113044955_Tables")]
     partial class Tables
     {
         /// <inheritdoc />

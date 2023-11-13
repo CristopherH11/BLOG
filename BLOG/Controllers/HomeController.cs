@@ -24,18 +24,8 @@ namespace BLOG.Controllers
             // Category
             mymodel.Categories = await _context.Categories.ToListAsync();
 
-            // Authors
-            var tempAuthors = from m in _context.Posts select m.AuthorId;
-            var tempAuthorsUnique = await tempAuthors.Distinct().ToListAsync();
-
             var allUsers = await _context.Users.ToListAsync();
             mymodel.Users = allUsers;
-
-            foreach (var a in tempAuthorsUnique)
-            {
-                var user = allUsers.Find(x => x.Id == a);
-                mymodel.Authors.Add(user);
-            }
 
             // Posts
             var tempPosts = from m in _context.Posts orderby m.PostDate descending select m;

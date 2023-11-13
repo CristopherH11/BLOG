@@ -39,6 +39,10 @@ public class BlogDbContext : IdentityDbContext
             .WithMany(g => g.Comments)
             .HasForeignKey(g => new { g.PostId });
 
+        builder.Entity<Post>()
+            .HasMany(e => e.Comments)
+            .WithOne(g => g.Post);
+
         builder.Entity<Comment>()
             .HasOne(e => e.User)
             .WithMany(g => g.Comments)

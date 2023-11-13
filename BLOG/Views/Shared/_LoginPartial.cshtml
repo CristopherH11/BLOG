@@ -17,6 +17,14 @@
                 </button>
             </li>
         }
+
+        <li class="nav-item ml-auto">
+            <button class="navbar_button">
+                <a class="form-inline nav-link" id="AgregarProducto" asp-controller="Posts" asp-action="Create">
+                    Agregar Post
+                </a>
+            </button>
+        </li>
         <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Posts/Delete", new { area = "" })">
             <button class="navbar_button" id="logout" type="submit">
                 <a class="form-inline nav-link">Cerrar sesión </a>

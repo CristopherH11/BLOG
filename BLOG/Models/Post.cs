@@ -13,7 +13,7 @@ namespace BLOG.Models
         public string AuthorId { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public AppUser User { get; set; }
     }
 }

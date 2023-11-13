@@ -4,6 +4,9 @@ using BLOG.Models;
 using BLOG.Data;
 using System.Composition;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using System.Dynamic;
+using System.Security.Claims;
 
 namespace BLOG.Controllers
 {
@@ -25,6 +28,7 @@ namespace BLOG.Controllers
     public class PostsController : Controller
     {
         private readonly BlogDbContext _context;
+        private dynamic mymodel = new ExpandoObject();
 
         public PostsController(BlogDbContext context)
         {
@@ -121,9 +125,14 @@ namespace BLOG.Controllers
         }
 
         // GET: Posts/Create
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            mymodel.Categories = await _context.Categories.ToListAsync();
+
+            mymodel.Post = new Post();
+
+            return View(mymodel);
         }
 
         // POST: Posts/Create
@@ -131,15 +140,24 @@ namespace BLOG.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body")] Post post)
+        public async Task<IActionResult> Create(string Title, string Body, int category)
         {
+            Post new_post = new Post
+            {
+                Title = Title,
+                Body = Body,
+                PostDate = DateTime.Now,
+                AuthorId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                CategoryId = category
+            };
+
             if (ModelState.IsValid)
             {
-                _context.Add(post);
+                _context.Add(new_post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
-            return View(post);
+            return View(new_post);
         }
 
         // GET: Posts/Edit/5

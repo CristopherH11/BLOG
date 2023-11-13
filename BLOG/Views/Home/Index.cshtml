@@ -22,8 +22,8 @@
                     </p>
                     <div class="callout">
                         <ul class="menu simple">
-                            <li><a href="@Url.Action("Author", "Posts", new { id = post.AuthorId })">Autor:  @post.AppUser.Name @post.AppUser.LastName</a></li>
-                            <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Post.Id">Comentarios: @post.CommentInfo.Count()</a></li>
+                            <li><a href="@Url.Action("Author", "Posts", new { id = post.AuthorId })">Autor:  @post.User.Name @post.User.LastName</a></li>
+                            <li><a asp-controller="Comments" asp-action="Create" asp-route-postId="@post.Id">Comentarios</a></li>
                             <li><a href="@Url.Action("Category", "Posts", new { id = post.CategoryId })">Categoría: @post.Category.Name</a></li>
                         </ul>
                     </div>
@@ -52,10 +52,13 @@
         </aside>
     </div>
     <div class="pagination">
-        @for (var i = 1; i <= Model.PostsCount / 5 + 1; i++)
+        @if (Model.PostsCount > 5)
         {
-            <a href="@Url.Action("Index", new { page = i})">@i</a>
-        }
+            @for (var i = 1; i <= Model.PostsCount / 5 + 1; i++)
+            {
+                <a href="@Url.Action("Index", new { page = i})">@i</a>
+            }
+        }     
     </div>
 </section>
 <script src="bower_components/jquery/dist/jquery.js?hash=4d87a332421d7631f5e204529a472bff"></script>

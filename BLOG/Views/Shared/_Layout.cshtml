@@ -28,15 +28,15 @@
                     <div class="collapse navbar-collapse" id="navbar-toggler">
                         @if (User.IsInRole("Admin"))
                         {
-                            <a class="navbar-brand" asp-page="">Administrador</a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> Administrador</a>
                         }
                         else if (SignInManager.IsSignedIn(User))
                         {
-                            <a class="navbar-brand" asp-page="">Autor</a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Autor</a>
                         }
                         else
                         {
-                            <a class="navbar-brand" asp-page="">Blog</a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Blog</a>
                         }
                         <ul class="navbar-nav d-flex justify-content-center align-items-center">
                         </ul>

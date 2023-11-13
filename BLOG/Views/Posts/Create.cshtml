@@ -1,4 +1,4 @@
-@model BLOG.Models.Post
+@model dynamic
 
 @{
     ViewData["Title"] = "Create";
@@ -10,17 +10,24 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form method="post" id="formRegistro" asp-action="Create" asp-controller="Posts">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label name="Title" class="control-label">Titulo del post</label>
+                <input name="Title" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
-                <span asp-validation-for="Body" class="text-danger"></span>
+                <label name="Body" class="control-label">Cuerpo del post</label>
+                <input name="Body" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="category">Categoría</label>
+                <select id="Category" name="category" class="form-control form-control-add" aria-required="true" placeholder="Categoría">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id"> @category.Name </option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
