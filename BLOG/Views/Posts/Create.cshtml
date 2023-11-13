@@ -9,7 +9,7 @@
 <h4>Post</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form method="post" id="formRegistro" asp-action="Create" asp-controller="Posts">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -18,16 +18,28 @@
             </div>
             <div class="form-group">
                 <label name="Body" class="control-label">Cuerpo del post</label>
-                <input name="Body" class="form-control form-control-add" />
+                <textarea name="Body" class="form-control form-control-add" rows="7"></textarea>
             </div>
-            <div class="form-group">
-                <label name="category">Categoría</label>
-                <select id="Category" name="category" class="form-control form-control-add" aria-required="true" placeholder="Categoría">
-                    @foreach (var category in Model.Categories)
-                    {
-                        <option value="@category.Id"> @category.Name </option>
-                    }
-                </select>
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-group">
+                        <label name="category">Categoría</label>
+                        <select id="Category" name="category" class="form-control form-control-add" aria-required="true" placeholder="Categoría">
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id"> @category.Name </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>¿No esta la categoría?</label>
+                        <a class="form-control form-control-add" id="AgregarCategoria" asp-controller="Categories" asp-action="Create">
+                            Agregar categoria
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

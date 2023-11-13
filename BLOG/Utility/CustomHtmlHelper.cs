@@ -11,7 +11,7 @@ public static class CustomHtmlHelper
         }
 
         string truncatedText = text.Substring(0, maxLength);
-        return new HtmlString($"{truncatedText}... <a href=\"Posts/Details/{id}\">Leer más</a>");
+        return new HtmlString($"{truncatedText}... <a href=\"Comments/Create?postId={id}\">Leer más</a>");
     }
 }
 

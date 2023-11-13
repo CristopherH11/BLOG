@@ -15,7 +15,6 @@
     </dl>
 </div>
 
-<!-- Mostrar comentarios existentes -->
 <h4>Comentarios</h4> 
 @if (Model.Comments == null || Model.Comments.Count == 0)
 {
@@ -33,15 +32,21 @@ else
     </ul>
 }
 
-<!-- Formulario para añadir un nuevo comentario -->
-<h4>Añadir un comentario</h4>
-<form asp-action="Create" asp-controller="Comments" method="post">
-    <input type="hidden" name="PostId" value="@Model.Id" />
-    <div>
-        <label for="Text">Comentario:</label>
-        <textarea name="Text"></textarea>
-    </div>
-    <div>
-        <input type="submit" value="Enviar comentario" />
-    </div>
-</form>
+<div class="col-8 new">
+    <h4> Haz un nuevo comantario</h4>
+    <form method="post" id="formRegistro" asp-action="Create" asp-controller="Comments">
+        <input type="hidden" name="postId" value="@Model.Id" />
+        <input type="hidden" name="authorId" value="@Model.AuthorId" />
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="form-group">
+                <textarea name="text" class="form-control form-control-add form-control form-control-add-lg" placeholder="Haz un comentario..." rows="5"></textarea>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-end align-items-center">
+                <input type="submit" value="Guardar" id="ReportButton" class="add_confirm btn btn-primary btn-sm" />
+            </div>
+        </div>
+    </form>
+</div>
