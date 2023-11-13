@@ -12,18 +12,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation-prototype.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" />
 </head>
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Posts" asp-action="Index">BLOG</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <partial name="_LoginPartial">
-        </nav>
+        <section class="navbarLV">
+            <nav class="navbar navbar-expand-md" data-bs-theme="dark">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar-toggler">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="navbar-brand" asp-page="/Index">Administrador</a>
+                        }
+                        else if (SignInManager.IsSignedIn(User))
+                        {
+                            <a class="navbar-brand" asp-page="/Index">Autor</a>
+                        }
+                        else
+                        {
+                            <a class="navbar-brand" asp-page="/Index">Blog</a>
+                        }
+                        <ul class="navbar-nav d-flex justify-content-center align-items-center">
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        </section>
     </header>
     <div class="container main-body">
         <main role="main" class="pb-3">

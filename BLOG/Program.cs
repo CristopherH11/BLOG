@@ -11,7 +11,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDatabase")));
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<BlogDbContext>();
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<BlogDbContext>();
 
 var app = builder.Build();
 
@@ -35,5 +37,17 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Posts}/{action=Index}/{id?}");
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var roles = new[] { "Admin" };
+
+    if (!await roleManager.RoleExistsAsync(roles[0]))
+    {
+        await roleManager.CreateAsync(new IdentityRole(roles[0]));
+    }
+}
 
 app.Run();

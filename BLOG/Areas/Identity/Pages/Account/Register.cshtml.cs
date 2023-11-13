@@ -98,6 +98,9 @@ namespace BLOG.Areas.Identity.Pages.Account
             [RegularExpression(@"^[a-zA-ZáéíóúñÑÁÉÍÓÚ]+$", ErrorMessage = "El apellido debe contener solo letras (mayúsculas o minúsculas).")]
             [Display(Name = "Apellido")]
             public string LastName { get; set; }
+
+            [Display(Name = "El usuario es Administrador")]
+            public bool IsAdmin { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -125,6 +128,10 @@ namespace BLOG.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    if (Input.IsAdmin)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
                     _logger.LogInformation("User created a new account with password.");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     await _context.SaveChangesAsync();
